@@ -1,0 +1,71 @@
+{
+  "name": "phoenix",
+  "version": "1.0.0",
+  "description": "MST-ACM backend API utilizing Koajs",
+  "main": "src/app.ts",
+  "repository": "git@github.com:sigdotcom/phoenix.git",
+  "scripts": {
+    "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec 'ts-node' ./src/app.ts",
+    "start": "yarn run build && node ./dist/app.js",
+    "build": "yarn run lint && tsc",
+    "lint": "tslint -c tslint.json -p tsconfig.json --force",
+    "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix --force",
+    "image:build": "docker build --tag phoenix .",
+    "image:run": "docker run -p 3000:3000 --rm -ti phoenix",
+    "test": "jest",
+    "test:watch": "jest --watchAll --coverage",
+    "test:coverage": "yarn run test --coverage",
+    "test:coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddimaria/koa-typescript-starter.git"
+  },
+  "author": "sigdotcom <acm@mst.edu>",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "@koa/cors": "^2.2.1",
+    "koa": "^2.5.0",
+    "koa-body": "^2.5.0",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^4.0.2",
+    "supertest": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "@types/koa": "^2.0.44",
+    "@types/koa-logger": "^3.1.0",
+    "@types/koa-router": "^7.0.27",
+    "@types/koa-static": "^4.0.0",
+    "@types/koa__cors": "^2.2.2",
+    "@types/supertest": "^2.0.4",
+    "coveralls": "^3.0.0",
+    "jest": "^22.4.3",
+    "nodemon": "^1.17.1",
+    "prettier": "^1.12.1",
+    "source-map-support": "^0.5.3",
+    "ts-jest": "^22.4.4",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.12.0",
+    "typescript": "^2.7.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "modulePathIgnorePatterns": ["<rootDir>/dist/"],
+    "collectCoverage": true
+
+  }
+}

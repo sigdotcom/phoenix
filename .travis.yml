@@ -1,0 +1,10 @@
+language: node_js
+
+cache:
+  directories:
+    - "node_modules"
+script:
+  - yarn run test
+  - yarn run build
+after_script:
+  - cat ./coverage/lcov.info | yarn coveralls
