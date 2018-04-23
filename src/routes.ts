@@ -1,15 +1,12 @@
+import { router as authRouter } from "./routes/auth";
+import { router as indexRouter } from "./routes/index";
+
 import * as Router from "koa-router";
 
+
 const router = new Router();
+router.use("", authRouter.routes(), authRouter.allowedMethods());
+router.use("", indexRouter.routes(), indexRouter.allowedMethods());
 
-/**
- * Base route, return a 401
- */
-router.get("/", async (ctx) => ctx.status = 401);
+export { router };
 
-/**
- * Basic healthcheck
- */
-router.get("/healthcheck", async (ctx) => ctx.body = "OK");
-
-export const routes = router.routes();
