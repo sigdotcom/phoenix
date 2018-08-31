@@ -25,4 +25,11 @@ describe("routes", () => {
         done();
     });
   });
+
+  describe(`GET /payments/charge`, async () => {
+    it("should process a payment", async done => {
+        const response = await request.get("/payments/charge");
+        expect(response.status).toEqual(200);
+    });
+  });
 });

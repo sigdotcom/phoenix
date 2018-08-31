@@ -35,6 +35,7 @@
       "@types/passport-local": "^1.0.33",
       "@types/superagent": "^3.8.3",
       "koa": "^2.5.0",
+      "koa-body": "^4.0.4",
       "koa-bodyparser": "^4.2.0",
       "koa-logger": "^3.2.0",
       "koa-passport": "^4.0.1",
@@ -43,6 +44,7 @@
       "passport-google-oauth": "^1.0.0",
       "passport-local": "^1.0.0",
       "pg": "^7.4.1",
+      "stripe": "^6.8.0",
       "typeorm": "0.2.7"
    },
    "devDependencies": {
