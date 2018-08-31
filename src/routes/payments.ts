@@ -3,7 +3,7 @@ import { Context } from "koa";
 import * as Router from "koa-router";
 
 // MAKE SURE YOU ARE USING TEST KEY WHEN DEVELOPING (e.g. sk_test_xxxxxx)
-const stripe = require("stripe")("sk_test_9ZGlktvPFLh1mq4KTxcwDSBV");
+const stripe = require("stripe")("insert key here");
 
 const router = new Router({
     prefix: "/payments",
