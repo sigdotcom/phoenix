@@ -9,27 +9,12 @@ describe("routes", () => {
     await server.close();
   });
 
-  describe(`GET /`, async () => {
-    it("should error on the default route with a 401", async done => {
-      const response = await request.get("/");
-      expect(response.status).toEqual(401);
-      done();
-    });
-  });
-
   describe(`GET /healthcheck`, () => {
     it("should healthcheck", async done => {
         const response = await request.get("/healthcheck/");
         expect(response.status).toEqual(200);
         expect(response.type).toEqual("text/plain");
         done();
-    });
-  });
-
-  describe(`GET /payments/charge`, async () => {
-    it("should process a payment", async done => {
-        const response = await request.get("/payments/charge");
-        expect(response.status).toEqual(200);
     });
   });
 });
