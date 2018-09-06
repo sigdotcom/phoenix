@@ -1,7 +1,7 @@
 import request = require("supertest");
 import { app } from "../../app";
 
-const server = app.listen();
+const server = app.listen(config.port);
 
 describe("payments", () => {
     afterEach(async () => {
