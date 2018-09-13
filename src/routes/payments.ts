@@ -17,11 +17,15 @@ createConnection();
 
 // Route to process payments
 router.post("/charge", async (ctx: Context) => {
+    // Get product object requested to purchase
+    const productRepository = await getConnection().getRepository(Product);
+    const product = await productRepository.findOne({ where: { stripeId: ctx.request.body.stripeProduct } });
+
     // Process received payment request
     let charge;
     try {
         charge = await stripe.charges.create({    
-            amount: ctx.request.body.stripeAmount,
+            amount: product.price,
             currency: "usd",
             source: ctx.request.body.stripeToken,
             description: "Ryan's Test Charge"
