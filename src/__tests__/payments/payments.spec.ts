@@ -33,7 +33,7 @@ describe("payments", () => {
     });
 
     describe(`POST /payments/charge`, () => {
-        it("should process a payment for the requested product", async done => {
+        it("should fail to process a payment for a non-existent product", async done => {
             // Process charge for non-existent product
             const response = await request(server)
                     .post('/payments/charge')
