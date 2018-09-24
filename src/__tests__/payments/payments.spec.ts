@@ -8,11 +8,11 @@ describe("payments", () => {
       await server.close();
     });
 
-    describe(`POST /payments/charge`, () => {
+    describe(`POST /charge`, () => {
         it("should process a payment for the requested product", async done => {
             // Create Product
             let response = await request(server)
-                    .post('/payments/product')
+                    .post('/product')
                     .send({ productName: "Automated Test Product",
                             productPrice: "2000",
                             productDescription: "A test product",
@@ -22,7 +22,7 @@ describe("payments", () => {
 
             // Process charge for created product
             response = await request(server)
-                    .post('/payments/charge')
+                    .post('/charge')
                     .send({ stripeToken: "tok_visa", 
                             stripeProduct: product.stripeId }); 
             expect(response.status).toEqual(200);
@@ -32,11 +32,11 @@ describe("payments", () => {
         });
     });
 
-    describe(`POST /payments/charge`, () => {
+    describe(`POST /charge`, () => {
         it("should fail to process a payment for a non-existent product", async done => {
             // Process charge for non-existent product
             const response = await request(server)
-                    .post('/payments/charge')
+                    .post('/charge')
                     .send({ stripeToken: "tok_visa", 
                             stripeProduct: "bad_id" }); 
             expect(response.status).toEqual(204);
@@ -44,11 +44,11 @@ describe("payments", () => {
         });
     });
 
-    describe(`POST /payments/product`, () => {
+    describe(`POST /product`, () => {
         it("should create a stripe product with discount", async done => {
             // Create Product using valid request containing discount
             const response = await request(server)
-                .post('/payments/product')
+                .post('/product')
                 .send({ productName: "Test Product",
                         productPrice: "1000",
                         productDiscount: "600",
@@ -61,11 +61,11 @@ describe("payments", () => {
         });
     });
 
-    describe(`POST /payments/product`, () => {
+    describe(`POST /product`, () => {
         it("should create a stripe product without discount", async done => {
             // Create Product using valid request not containing discount
             const response = await request(server)
-                .post('/payments/product')
+                .post('/product')
                 .send({ productName: "Test Product 2",
                         productPrice: "1000",
                         productDescription: "A great product..." });
@@ -77,11 +77,11 @@ describe("payments", () => {
         });
     });
 
-    describe(`POST /payments/product`, () => {
+    describe(`POST /product`, () => {
         it("should fail to create a product due to lack of name", async done => {
             // Create Product using invalid request
             const response = await request(server)
-                .post('/payments/product')
+                .post('/product')
                 .send({ productPrice: "1000",
                         productDescription: "A great product..." });
             // Check product was not created
