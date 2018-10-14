@@ -1,17 +1,20 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2017",
-    "noImplicitAny": true,
-    "outDir": "./dist",
-    "sourceMap": true
-  },
-  "include": [
-    "./**/*.ts",
-    "./**/*.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+   "compilerOptions": {
+      "lib": [
+         "es2017",
+         "dom"
+      ],
+      "target": "es2017",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true
+   },
+   "exclude": [
+       "node_modules",
+       "**/*.test.ts",
+       "**/*.spec.ts"
+    ]
 }
