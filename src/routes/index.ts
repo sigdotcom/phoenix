@@ -9,7 +9,7 @@ const router = new Router();
 /**
  * Base route, return a 401
  */
-router.get("/", async (ctx: Context) => {
+router.get("", async (ctx: Context) => {
   ctx.body = "Hello, World!";
   ctx.status = 200;
 });
@@ -17,7 +17,7 @@ router.get("/", async (ctx: Context) => {
 /**
  * Basic healthcheck
  */
-router.get("/healthcheck/", async (ctx: Context) => {
+router.get("healthcheck/", async (ctx: Context) => {
   ctx.body = "OK";
   ctx.status = 200;
 });

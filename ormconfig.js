@@ -6,7 +6,7 @@ module.exports = {
    "host": process.env.DB_HOST,
    "username": process.env.DB_USERNAME || "postgres",
    "password": process.env.DB_PASSWORD || "",
-   "database": process.env.DB_TABLE || "pheonix",
+   "database": process.env.DB_TABLE || "phoenix",
    "port": process.env.DB_PORT || 5432,
    "synchronize": true,
    "logging": true,

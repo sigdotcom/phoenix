@@ -3,9 +3,13 @@ import * as Koa from "koa";
 import * as koaBody from "koa-bodyparser";
 import * as logger from "koa-logger";
 import * as session from "koa-session";
-import { passport } from "./middleware/auth";
 
+import { useKoaServer } from "routing-controllers";
 import { createConnection } from "typeorm";
+import { AccountController } from "./controllers/Account";
+import { GroupController } from "./controllers/Group";
+import { PermissionController } from "./controllers/Permission";
+import { passport } from "./middleware/auth";
 
 import { config } from "./config";
 import { router } from "./routes";
@@ -23,6 +27,11 @@ app.use(passport.session());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+useKoaServer(app, {
+  controllers: [AccountController, GroupController],
+  routePrefix: "/api"
+});
 
 /* istanbul ignore next */
 if (!module.parent) {

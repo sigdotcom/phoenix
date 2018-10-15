@@ -5,9 +5,7 @@ import { isAuthenticated } from "../lib/auth";
 import * as passport from "koa-passport";
 import * as Router from "koa-router";
 
-const router = new Router({
-  prefix: "/auth",
-});
+const router = new Router();
 
 router.get(`/${config.GOOGLE_PROVIDER_NAME}/`, async (ctx: Context, next: any) => {
   if (!isAuthenticated(ctx)) {

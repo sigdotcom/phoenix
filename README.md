@@ -73,7 +73,7 @@ git clone git@github.com:sigdotcom/phoenix.git
 git clone https://github.com/sigdotcom/phoenix.git
 cd phoenix
 yarn install
-docker run -p 5432:5432 --name phoenix_db -e POSTGRES_USER=postgres -e POSTGRES_DB=pheonix postgres
+docker run -p 5432:5432 --name phoenix_db -e POSTGRES_USER=postgres -e POSTGRES_DB=phoenix postgres
 GOOGLE_CLIENT_ID=<acquired_client_id> GOOGLE_CLIENT_SECRET=<acquired_client_secret> yarn start:dev
 # Open http://127.0.0.1:3000/ in your web browser to see the API
 ```
@@ -88,7 +88,7 @@ git clone git@github.com:sigdotcom/phoenix.git
 git clone https://github.com/sigdotcom/phoenix.git
 cd phoenix
 yarn install
-docker run -p 5432:5432 --name phoenix_db -e POSTGRES_USER=postgres -e POSTGRES_DB=pheonix postgres
+docker run -p 5432:5432 --name phoenix_db -e POSTGRES_USER=postgres -e POSTGRES_DB=phoenix postgres
 yarn build
 GOOGLE_CLIENT_ID=<acquired_client_id> GOOGLE_CLIENT_SECRET=<acquired_client_secret> yarn start:prod
 # Open http://127.0.0.1:3000/ in your web browser to see the API
