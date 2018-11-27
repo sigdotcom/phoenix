@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable} from "typeorm";
+import { Sig } from "./Sigs";
 
 @Entity()
 export class Account extends BaseEntity {
@@ -37,4 +38,8 @@ export class Account extends BaseEntity {
       default: true
     })
     public isActive: boolean;
+
+    @ManyToMany(type => Sig, sig => sig.accounts)
+    @JoinTable()
+    sigs: Sig[]; 
 }
