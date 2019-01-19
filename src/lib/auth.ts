@@ -2,8 +2,8 @@
  * Helper functions for user authentication. Act as a wrapper for passport
  * authentication functions for unit-testing and mocking purposes.
  */
-import { Context } from "koa";
+import * as Koa from "koa";
 
-export function isAuthenticated(ctx: Context) {
+export function isAuthenticated(ctx: Koa.BaseContext) {
   return ctx.isAuthenticated();
 }

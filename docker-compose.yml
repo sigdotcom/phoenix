@@ -1,16 +1,41 @@
 version: '3'
+
 services: 
-  web: 
-    build:  
-      context: .
-      dockerfile: Dockerfile
+  db: 
+    image: "postgres"
+    networks:
+      - db_nw
     environment: 
-      - DB_HOST=db
-    ports: 
-      - 3000:3000 
+      - POSTGRES_USER=phoenix
+      - POSTGRES_PASSWORD=phoenix
+  web: 
+    build: .
+    volumes:
+      - .:/server
+    networks:
+      - db_nw
+      - web_nw
     depends_on: 
       - db 
-  db: 
-    image: postgres
+    env_file:
+      - ./.docker/web.env
     environment: 
-      - POSTGRES_DB=test
+      - DB_HOST=db
+      - DB_USERNAME=phoenix
+      - DB_PASSWORD=phoenix
+  nginx:
+    image: "nginx"
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./.docker/conf.d:/etc/nginx/conf.d
+    networks:
+      - web_nw
+    depends_on:
+      - web
+networks:
+  db_nw:
+    driver: bridge
+  web_nw:
+    driver: bridge

@@ -21,7 +21,7 @@ passport.deserializeUser(async (userID: string, done: any) => {
 // TODO: remove hard-coded userProfileURL
 // TODO: change callbackURL to support standard website
 passport.use(new googleStrategy({
-    callbackURL: `http://${config.host}:${config.port}/auth/google/callback/`,
+    callbackURL: `http://localhost/auth/google/callback/`,
     clientID: config.GOOGLE_CLIENT_ID,
     clientSecret: config.GOOGLE_CLIENT_SECRET,
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"

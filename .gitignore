@@ -75,3 +75,5 @@ tmp/
 temp/
 dist/
 .vs/
+
+.docker/web.env

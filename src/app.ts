@@ -4,7 +4,7 @@ import * as koaBody from "koa-bodyparser";
 import * as logger from "koa-logger";
 import * as session from "koa-session";
 
-import { useKoaServer } from "routing-controllers";
+import { Action, useKoaServer} from "routing-controllers";
 import { createConnection } from "typeorm";
 import { AccountController } from "./controllers/Account";
 import { GroupController } from "./controllers/Group";
@@ -29,8 +29,12 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 useKoaServer(app, {
-  controllers: [AccountController, GroupController],
-  routePrefix: "/api"
+  authorizationChecker: async (action: Action, roles: string[]) => {
+    console.log(action);
+    return false;
+  },
+  controllers: [AccountController, GroupController, PermissionController],
+  routePrefix: "/api",
 });
 
 /* istanbul ignore next */

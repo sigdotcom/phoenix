@@ -7,6 +7,6 @@ export class Group extends BaseEntity {
   public name: string;
 
   @ManyToOne(type => Account, account => account.permissions)
-  public account: Account;
+  public accounts: Account;
 
 }

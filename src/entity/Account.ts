@@ -45,7 +45,7 @@ export class Account extends BaseEntity {
   @JoinTable()
   public permissions: Permission[];
 
-  @OneToMany(type => Group, group => group.account)
+  @OneToMany(type => Group, group => group.accounts)
   @JoinTable()
   public groups: Group[];
 }
