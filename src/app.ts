@@ -4,9 +4,10 @@ import * as koaBody from "koa-bodyparser";
 import * as logger from "koa-logger";
 import * as session from "koa-session";
 
-import { Action, useKoaServer} from "routing-controllers";
+import { Action, useKoaServer } from "routing-controllers";
 import { createConnection } from "typeorm";
 import { AccountController } from "./controllers/Account";
+import { ApplicationController } from "./controllers/Application";
 import { GroupController } from "./controllers/Group";
 import { PermissionController } from "./controllers/Permission";
 import { passport } from "./middleware/auth";
@@ -29,12 +30,18 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 useKoaServer(app, {
-  authorizationChecker: async (action: Action, roles: string[]) => {
-    console.log(action);
-    return false;
+  controllers: [AccountController, ApplicationController, GroupController, PermissionController],
+  currentUserChecker: async (action: Action) => {
+    const user = action.context.state.user;
+    const auth_header = action.context.headers.authorization;
+    if (user) {
+      return user;
+    }
+
+    await passport.authenticate('bearer', { session: false })(action.context, async () => {});
+    return action.context.state.user;
   },
-  controllers: [AccountController, GroupController, PermissionController],
-  routePrefix: "/api",
+  routePrefix: "/api/v1",
 });
 
 /* istanbul ignore next */

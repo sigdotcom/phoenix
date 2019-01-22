@@ -1,32 +1,49 @@
-import * as Routing from "routing-controllers";
+import { Body, CurrentUser, Delete, Get, JsonController, OnUndefined, Param, Patch, Post, UnauthorizedError } from "routing-controllers";
 import { EntityFromBody } from "typeorm-routing-controllers-extensions";
+
+import * as Auth from "../lib/auth";
+
+import { Account } from "../entity/Account";
 import { Permission } from "../entity/Permission";
 
-@Routing.JsonController()
+@JsonController()
 export class PermissionController {
-  @Routing.Get("/permissions/")
+  @Get("/permissions/")
   public async getAll() {
     return Permission.find();
   }
-  @Routing.Post("/permissions/")
-  public save(@EntityFromBody() permission: Permission) {
+
+  @Post("/permissions/")
+  public save(@CurrentUser({ required: true }) user: Account, @EntityFromBody() permission: Permission) {
+    if (Auth.isAuthorized(user, ["create permissions"])) {
       return permission.save();
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permission to create a new permission");
+    }
   }
 
-  @Routing.Get("/permissions/:name/")
-  public get(@Routing.Param("name") name: string) {
+  @Get("/permissions/:name/")
+  public get(@Param("name") name: string) {
     return Permission.findOne({ name });
   }
 
-  @Routing.Patch("/permissions/:name/")
-  public async patch(@Routing.Param("name") name: string, @Routing.Body() permission: object) {
-    await Permission.update(name, permission);
-    return Permission.findOne({ name });
+  @Patch("/permissions/:name/")
+  public async patch(@CurrentUser({ required: true }) user: Account, @Param("name") name: string, @Body() permission: object) {
+    if (Auth.isAuthorized(user, ["modify specific permissions"])) {
+      await Permission.update(name, permission);
+      return Permission.findOne({ name });
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permission to modify permissions");
+    }
   }
 
-  @Routing.Delete("/permissions/:name/")
-  @Routing.OnUndefined(204)
-  public async remove(@Routing.Param("name") name: string) {
-    return Permission.delete({ name });
+  @Delete("/permissions/:name/")
+  @OnUndefined(204)
+  public async remove(@CurrentUser({ required: true }) user: Account, @Param("name") name: string) {
+    if (Auth.isAuthorized(user, ["delete specific permissions"])) {
+      return Permission.delete({ name });
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permission to delete permissions");
+    }
   }
 }

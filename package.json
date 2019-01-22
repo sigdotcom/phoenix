@@ -41,6 +41,7 @@
       "koa-router": "^7.4.0",
       "koa-session": "^5.8.1",
       "passport-google-oauth": "^1.0.0",
+      "passport-http-bearer": "^1.0.1",
       "passport-local": "^1.0.0",
       "pg": "^7.4.1",
       "routing-controllers": "^0.7.7",

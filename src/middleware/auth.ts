@@ -1,15 +1,18 @@
 import * as passport from "koa-passport";
 
 import { OAuth2Strategy as googleStrategy } from "passport-google-oauth";
+import { Strategy as BearerStrategy } from "passport-http-bearer";
+
 import { config } from "../config";
 import { Account } from "../entity/Account";
+import { Application } from "../entity/Application";
 
 passport.serializeUser((user: Account, done: any) => {
   done(undefined, user.id);
 });
 
 passport.deserializeUser(async (userID: string, done: any) => {
-  const user = await Account.findOne({id: userID});
+  const user = await Account.findOne({id: userID}, {relations: ["permissions"]});
   if (user) {
     done(undefined, user);
   } else {
@@ -51,6 +54,27 @@ passport.use(new googleStrategy({
       done(err);
     }
   }
+));
+
+passport.use(new BearerStrategy(
+  async (token, done) => {
+    try {
+      const application = await Application.findOne(
+        { token }, {relations: ["account", "account.permissions"]}
+      );
+      const user = application.account;
+      console.log(token);
+      console.log(application);
+
+      if (!application) {
+        return done(undefined, true);
+      }
+      return done(undefined, user, { scope: 'all' });
+    } catch (err) {
+      return done(err);
+    }
+
+    }
 ));
 
 export { passport };

@@ -1,5 +1,6 @@
-import { BaseEntity, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { Account } from "./Account";
+import { Permission } from "./Permission";
 
 @Entity()
 export class Group extends BaseEntity {
@@ -9,4 +10,7 @@ export class Group extends BaseEntity {
   @ManyToOne(type => Account, account => account.permissions)
   public accounts: Account;
 
+  @ManyToMany(type => Permission)
+  @JoinTable()
+  public permissions: Permission[];
 }

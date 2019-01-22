@@ -1,5 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, OneToMany, JoinTable } from "typeorm";
 
+import { Application } from "./Application";
 import { Group } from "./Group";
 import { Permission } from "./Permission";
 
@@ -48,4 +49,9 @@ export class Account extends BaseEntity {
   @OneToMany(type => Group, group => group.accounts)
   @JoinTable()
   public groups: Group[];
+
+  @OneToMany(type => Application, application => application.account)
+  @JoinTable()
+  public applications: Application[];
+
 }

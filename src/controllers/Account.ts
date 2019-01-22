@@ -1,34 +1,68 @@
-import * as Routing from "routing-controllers";
+import { Body, CurrentUser, Delete, Get, JsonController, OnUndefined, Param, Patch, Post, UnauthorizedError } from "routing-controllers";
 import { EntityFromBody } from "typeorm-routing-controllers-extensions";
-import { Account } from "../entity/Account";
 
-@Routing.JsonController()
+import { Account } from "../entity/Account";
+import { Application } from "../entity/Application";
+import * as Auth from "../lib/auth";
+
+@JsonController()
 export class AccountController {
 
-  @Routing.Get("/accounts/")
-  @Routing.Authorized()
+  @Get("/accounts/")
   public async getAll() {
-    return Account.find({relations: ["permissions", "groups", ]});
+    return Account.find({relations: ["permissions", "groups"]});
   }
-  @Routing.Post("/accounts/")
-  public save(@EntityFromBody() account: Account) {
+
+  @Post("/accounts/")
+  public save(@CurrentUser({ required: true }) user: Account, @EntityFromBody() account: Account) {
+    if (Auth.isAuthorized(user, ["create accounts"])) {
       return account.save();
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permissions to create a new user");
+    }
   }
 
-  @Routing.Get("/accounts/:id/")
-  public get(@Routing.Param("id") id: string) {
-    return Account.findOne({ id });
+  @Get("/accounts/:id/")
+  public async get(@CurrentUser({ required: true }) user: Account, @Param("id") id: string) {
+    if (Auth.isAuthorized(user, ["access specific accounts"]) || id === user.id) {
+      return Account.findOne({ id }, {relations: ["groups", "permissions", "applications"]});
+    }
+    else {
+      throw new UnauthorizedError("You do not have sufficient permissions to access specific users.");
+    }
   }
 
-  @Routing.Patch("/accounts/:id/")
-  public async patch(@Routing.Param("id") id: string, @Routing.Body() account: object) {
-    await Account.update(id, account);
-    return Account.findOne({ id });
+  @Patch("/accounts/:id/")
+  public async patch(@CurrentUser({ required: true }) user: Account, @Param("id") id: string, @Body() account: object) {
+    if (Auth.isAuthorized(user, ["modify specific accounts"]) || id === user.id) {
+      await Account.update(id, account);
+      return Account.findOne({ id });
+    }
+    else {
+      throw new UnauthorizedError("You do not have sufficient permissions to modify specific users.");
+    }
   }
 
-  @Routing.Delete("/accounts/:id/")
-  @Routing.OnUndefined(204)
-  public async remove(@Routing.Param("id") id: string) {
-    return Account.delete({ id });
+  @Delete("/accounts/:id/")
+  @OnUndefined(204)
+  public async remove(@CurrentUser({ required: true }) user: Account, @Param("id") id: string) {
+    if (Auth.isAuthorized(user, ["delete specific accounts"]) || id === user.id) {
+      return Account.delete({ id });
+    }
+    else {
+      throw new UnauthorizedError("You do not have sufficient permissions to delete specific users.");
+    }
+  }
+
+  @Post("/accounts/:id/applications/")
+  public async create_app(@CurrentUser({ required: true }) user: Account, @Param("id") id: string, @EntityFromBody() application: Application) {
+    if (Auth.isAuthorized(user, ["create user application"]) || id === user.id) {
+      const foundUser = await Account.findOne({ id });
+      application.account = foundUser;
+      return application.save();
+    }
+    else {
+      throw new UnauthorizedError("You do not have sufficient permissions to access specific users.");
+    }
   }
 }
