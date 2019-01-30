@@ -11,7 +11,7 @@ router.get(`/${config.GOOGLE_PROVIDER_NAME}/`, async (ctx: Koa.ParameterizedCont
   if (!isAuthenticated(ctx)) {
     await passport.authenticate('google', {
       hd: "mst.edu",
-      scope: ["openid", "email", "profile"],
+      scope: ["openid", "profile", "email"],
     })(ctx, next);
   }
   else {
@@ -28,6 +28,12 @@ router.get(`/${config.GOOGLE_PROVIDER_NAME}/callback/`, async (ctx: Koa.Paramete
   } else {
     ctx.redirect("/");
   }
+});
+
+router.get("/logout/", async (ctx: Koa.ParameterizedContext, next: any) => {
+  ctx.logout();
+  console.log(ctx.state);
+  ctx.redirect("/");
 });
 
 export { router };
