@@ -19,7 +19,7 @@ export class GroupController {
     if (Auth.isAuthorized(user, ["create groups"])) {
       return group.save();
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to create a new group");
+      throw new UnauthorizedError("You do not have sufficient permission to create a new group.");
     }
   }
 
@@ -34,7 +34,7 @@ export class GroupController {
       await Group.update(name, group);
       return Group.findOne({ name });
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to modify specific groups");
+      throw new UnauthorizedError("You do not have sufficient permission to modify specific groups.");
     }
   }
 
@@ -44,7 +44,7 @@ export class GroupController {
     if (Auth.isAuthorized(user, ["delete specific groups"])) {
       return Group.delete({ name });
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to delete specific groups");
+      throw new UnauthorizedError("You do not have sufficient permission to delete specific groups.");
     }
   }
 }

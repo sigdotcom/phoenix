@@ -18,7 +18,7 @@ export class AccountController {
     if (Auth.isAuthorized(user, ["create accounts"])) {
       return account.save();
     } else {
-      throw new UnauthorizedError("You do not have sufficient permissions to create a new user");
+      throw new UnauthorizedError("You do not have sufficient permissions to create a new user.");
     }
   }
 
@@ -62,7 +62,9 @@ export class AccountController {
       return application.save();
     }
     else {
-      throw new UnauthorizedError("You do not have sufficient permissions to access specific users.");
+      throw new UnauthorizedError(
+        "You do not have sufficient permissions to create an application for a specific user."
+      );
     }
   }
 }

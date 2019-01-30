@@ -18,7 +18,7 @@ export class PermissionController {
     if (Auth.isAuthorized(user, ["create permissions"])) {
       return permission.save();
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to create a new permission");
+      throw new UnauthorizedError("You do not have sufficient permission to create a new permission.");
     }
   }
 
@@ -33,7 +33,7 @@ export class PermissionController {
       await Permission.update(name, permission);
       return Permission.findOne({ name });
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to modify permissions");
+      throw new UnauthorizedError("You do not have sufficient permission to modify specific permissions.");
     }
   }
 
@@ -43,7 +43,7 @@ export class PermissionController {
     if (Auth.isAuthorized(user, ["delete specific permissions"])) {
       return Permission.delete({ name });
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to delete permissions");
+      throw new UnauthorizedError("You do not have sufficient permission to delete specific permissions.");
     }
   }
 }

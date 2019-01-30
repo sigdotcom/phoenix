@@ -32,7 +32,6 @@ router.get(`/${config.GOOGLE_PROVIDER_NAME}/callback/`, async (ctx: Koa.Paramete
 
 router.get("/logout/", async (ctx: Koa.ParameterizedContext, next: any) => {
   ctx.logout();
-  console.log(ctx.state);
   ctx.redirect("/");
 });
 

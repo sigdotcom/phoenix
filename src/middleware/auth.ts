@@ -63,8 +63,6 @@ passport.use(new BearerStrategy(
         { token }, {relations: ["account", "account.permissions"]}
       );
       const user = application.account;
-      console.log(token);
-      console.log(application);
 
       if (!application) {
         return done(undefined, true);

@@ -12,7 +12,6 @@ export function isAuthenticated(ctx: Koa.BaseContext): boolean {
 export function isAuthorized(user: Account, roles = []): boolean {
     const permissions = user.permissions;
     const permissionNames = permissions.map(item => item.name);
-    console.log(permissionNames);
 
     if (user && !roles.length) {
       return true;
