@@ -10,8 +10,12 @@ import { Group } from "../entity/Group";
 @JsonController()
 export class GroupController {
   @Get("/groups/")
-  public async getAll() {
-    return Group.find({ relations: ["accounts", "permissions"] });
+  public async getAll(@CurrentUser({ required: true }) user: Account) {
+    if (Auth.isAuthorized(user, ["view groups"])) {
+      return Group.find({ relations: ["accounts", "permissions"] });
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permission to view groups.");
+    }
   }
 
   @Post("/groups/")
@@ -24,13 +28,17 @@ export class GroupController {
   }
 
   @Get("/groups/:name/")
-  public get(@Param("name") name: string) {
-    return Group.findOne({ name });
+  public get(@CurrentUser({ required: true }) user: Account, @Param("name") name: string) {
+    if (Auth.isAuthorized(user, ["view groups"])) {
+      return Group.findOne({ name });
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permission to view specific groups.");
+    }
   }
 
   @Patch("/groups/:name/")
   public async patch(@CurrentUser({ required: true }) user: Account, @Param("name") name: string, @Body() group: object) {
-    if (Auth.isAuthorized(user, ["modify specific groups"])) {
+    if (Auth.isAuthorized(user, ["modify groups"])) {
       await Group.update(name, group);
       return Group.findOne({ name });
     } else {

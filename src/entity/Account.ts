@@ -26,7 +26,8 @@ export class Account extends BaseEntity {
   public email: string;
 
   @Column({
-      default: false
+    default: false,
+    select: false
   })
   public isSuperAdmin: boolean;
 
@@ -57,5 +58,5 @@ export class Account extends BaseEntity {
 
   @ManyToMany(type => Sig, sig => sig.accounts)
   @JoinTable()
-  public sigs: Sig[]; 
+  public sigs: Sig[];
 }

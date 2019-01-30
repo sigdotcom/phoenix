@@ -9,8 +9,12 @@ import { Permission } from "../entity/Permission";
 @JsonController()
 export class PermissionController {
   @Get("/permissions/")
-  public async getAll() {
-    return Permission.find();
+  public async getAll(@CurrentUser({ required: true }) user: Account) {
+    if (Auth.isAuthorized(user, ["view permissions"])) {
+      return Permission.find();
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permissions to view all permissions.");
+    }
   }
 
   @Post("/permissions/")
@@ -23,27 +27,31 @@ export class PermissionController {
   }
 
   @Get("/permissions/:name/")
-  public get(@Param("name") name: string) {
-    return Permission.findOne({ name });
+  public get(@CurrentUser({ required: true }) user: Account, @Param("name") name: string) {
+    if (Auth.isAuthorized(user, ["view permissions"])) {
+      return Permission.findOne({ name });
+    } else {
+      throw new UnauthorizedError("You do not have sufficient permissions to view specific permissions.");
+    }
   }
 
   @Patch("/permissions/:name/")
   public async patch(@CurrentUser({ required: true }) user: Account, @Param("name") name: string, @Body() permission: object) {
-    if (Auth.isAuthorized(user, ["modify specific permissions"])) {
+    if (Auth.isAuthorized(user, ["modify permissions"])) {
       await Permission.update(name, permission);
       return Permission.findOne({ name });
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to modify specific permissions.");
+      throw new UnauthorizedError("You do not have sufficient permission to modify permissions.");
     }
   }
 
   @Delete("/permissions/:name/")
   @OnUndefined(204)
   public async remove(@CurrentUser({ required: true }) user: Account, @Param("name") name: string) {
-    if (Auth.isAuthorized(user, ["delete specific permissions"])) {
+    if (Auth.isAuthorized(user, ["delete permissions"])) {
       return Permission.delete({ name });
     } else {
-      throw new UnauthorizedError("You do not have sufficient permission to delete specific permissions.");
+      throw new UnauthorizedError("You do not have sufficient permission to delete permissions.");
     }
   }
 }

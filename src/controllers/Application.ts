@@ -31,7 +31,7 @@ export class ApplicationController {
   public async get(@CurrentUser({ required: true }) user: Account, @Param("id") id: string) {
     const application = await Application.findOne({ id }, {relations: ["account"]});
 
-    if (Auth.isAuthorized(user, ["access specific applications"]) || application.account.id === user.id) {
+    if (Auth.isAuthorized(user, ["view applications"]) || application.account.id === user.id) {
       return application;
     }
     else {
@@ -43,12 +43,12 @@ export class ApplicationController {
   public async patch(@CurrentUser({ required: true }) user: Account, @Param("id") id: string, @Body() application: object) {
     const curApplication = await Application.findOne({ id }, {relations: ["account"]});
 
-    if (Auth.isAuthorized(user, ["modify specific applications"]) || curApplication.account.id === user.id) {
+    if (Auth.isAuthorized(user, ["modify applications"]) || curApplication.account.id === user.id) {
       await Application.update(id, application);
       return Application.findOne({ id });
     }
     else {
-      throw new UnauthorizedError("You do not have sufficient permissions to modify specific applications.");
+      throw new UnauthorizedError("You do not have sufficient permissions to modify applications.");
     }
   }
 
@@ -57,11 +57,11 @@ export class ApplicationController {
   public async remove(@CurrentUser({ required: true }) user: Account, @Param("id") id: string) {
     const application = await Application.findOne({ id }, {relations: ["account"]});
 
-    if (Auth.isAuthorized(user, ["delete specific applications"]) || application.account.id === user.id) {
+    if (Auth.isAuthorized(user, ["delete applications"]) || application.account.id === user.id) {
       return Application.delete({ id });
     }
     else {
-      throw new UnauthorizedError("You do not have sufficient permissions to delete specific applications.");
+      throw new UnauthorizedError("You do not have sufficient permissions to delete applications.");
     }
   }
 }

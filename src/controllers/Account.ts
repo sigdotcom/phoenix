@@ -9,8 +9,8 @@ import * as Auth from "../lib/auth";
 export class AccountController {
 
   @Get("/accounts/")
-  public async getAll() {
-    return Account.find({relations: ["permissions", "groups"]});
+  public async getAll(@CurrentUser({ required: true }) user: Account) {
+    return Account.find();
   }
 
   @Post("/accounts/")
