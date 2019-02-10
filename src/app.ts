@@ -8,6 +8,7 @@ import { Action, useKoaServer } from "routing-controllers";
 import { createConnection } from "typeorm";
 import { AccountController } from "./controllers/Account";
 import { ApplicationController } from "./controllers/Application";
+import { EventController } from "./controllers/Event";
 import { GroupController } from "./controllers/Group";
 import { PermissionController } from "./controllers/Permission";
 import { passport } from "./middleware/auth";
@@ -30,7 +31,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 useKoaServer(app, {
-  controllers: [AccountController, ApplicationController, GroupController, PermissionController],
+  controllers: [AccountController, ApplicationController, EventController, GroupController, PermissionController],
   currentUserChecker: async (action: Action) => {
     const user = action.context.state.user;
     const auth_header = action.context.headers.authorization;

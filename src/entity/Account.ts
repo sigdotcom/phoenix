@@ -1,6 +1,7 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinTable } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 import { Application } from "./Application";
+import { Event } from "./Event";
 import { Group } from "./Group";
 import { Permission } from "./Permission";
 import { Sig } from "./Sigs";
@@ -59,4 +60,8 @@ export class Account extends BaseEntity {
   @ManyToMany(type => Sig, sig => sig.accounts)
   @JoinTable()
   public sigs: Sig[];
+
+  @OneToMany(type => Event, event => event.creator)
+  @JoinTable()
+  public createdEvents: Event[];
 }

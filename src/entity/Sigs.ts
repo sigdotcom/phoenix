@@ -1,8 +1,10 @@
-import { BaseEntity, Entity, PrimaryColumn, Column, CreateDateColumn, ManyToMany } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, PrimaryColumn } from "typeorm";
+
 import { Account } from "./Account";
+import { Event } from "./Event";
 
 @Entity()
-export class Sig extends BaseEntity{
+export class Sig extends BaseEntity {
   @PrimaryColumn()
   public name: string;
 
@@ -13,5 +15,8 @@ export class Sig extends BaseEntity{
   public description: string;
 
   @ManyToMany(type => Account, account => account.sigs)
-  public accounts: Account[]; 
+  public accounts: Account[];
+
+  @ManyToMany(type => Event, event => event.hostSigs)
+  public hostedEvents: Event[];
 }
