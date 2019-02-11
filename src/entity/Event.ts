@@ -29,4 +29,32 @@ export class Event extends BaseEntity {
       length: 100
   })
   public eventTitle: string;
+
+  @Column({
+      length: 300
+  })
+  public description: string;
+
+  @Column({
+      length: 100
+  })
+  public location: string;
+
+  /*@ManyToOne(type => Product, product => product.events)
+  @JoinColumn({
+    nullable: true
+  })
+  public product: Product;*/
+
+  @Column({
+      length: 100,
+      nullable: true
+  })
+  public flierLink: string;
+
+  @Column({
+      length: 100,
+      nullable: true
+  })
+  public eventLink: string;
 }
