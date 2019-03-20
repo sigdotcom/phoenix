@@ -1,51 +1,70 @@
 import requests
 
-API_URL = "http://localhost:3000/api/"
-ACCOUNT_URL = API_URL + "accounts/"
-PERMISSION_URL = API_URL + "permissions/"
-GROUP_URL = API_URL + "groups/"
+USER_ID = "74a65c12-86ad-4ffd-a463-27ec8ccefd27"
+BEARER_TOKEN = "08e7768e-0ef8-477a-9ff9-f35fe25a1fb8"
+
+API_BASE_URL = "http://localhost/api/v1/"
+PRODUCT_URL = API_BASE_URL + "products/"
+APPLICATION_URL = API_BASE_URL + "accounts/" + USER_ID + "/applications/"
 
 
-def make_post(url, data):
-    response = requests.post(url, json=data)
-    print(response.content)
-    return response.json()
+def make_request(type, url, json=None):
+    request = getattr(requests, type)
+    if json:
+        return request(
+            url,
+            json,
+            headers={"Authorization": "Bearer " + BEARER_TOKEN}
+        )
+    else:
+        return request(
+            url,
+            headers={"Authorization": "Bearer " + BEARER_TOKEN}
+        )
 
-
-def make_account(firstName, lastName, email):
-    return make_post(
-        ACCOUNT_URL,
-        {
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
-        }
-    )
-
-
-def make_permission(account_id, name):
-    return make_post(
-        PERMISSION_URL,
-        {
-            "account": account_id,
+def create_application(name):
+    return make_request(
+        "post",
+        APPLICATION_URL,
+        json={
             "name": name
         }
     )
 
-
-def make_group(name):
-    return make_post(
-        GROUP_URL,
-        {
-            "name": name
+def create_product(name, description, price):
+    return make_request(
+        "post",
+        PRODUCT_URL,
+        json={
+            "name": name,
+            "description": description,
+            "price": price
         }
     )
 
 
-# account = make_account("Kevin", "Schoonover", "ksyh3@mst.edu")
-# print(account)
-account = {"id": "a64aae0a-ae2b-411b-afd0-8c2c77dd640a"}
-permission = make_permission(account.get("id"), "test")
-print(permission)
-group = make_group("test")
-print(group)
+def create_transaction():
+    response = create_product("test", "test", 10.10)
+    product_id = response.json().get("id")
+    transaction_url = PRODUCT_URL + product_id + "/transactions/"
+
+    return make_request(
+        "post", transaction_url, json={"token": "tok_visa"}
+    )
+
+# Creating an application
+# response = create_application("test")
+# print(response.json())
+
+# Creating a product
+# response = create_product(
+#   "ACM Semesterly Membership",
+#   "ACM Semesterly Membership",
+#   20.20
+# )
+# print(response.json())
+
+
+# Creating a transaction
+response = create_transaction()
+print(response.json())
