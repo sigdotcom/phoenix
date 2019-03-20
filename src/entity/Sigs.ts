@@ -1,5 +1,11 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, PrimaryColumn } from "typeorm";
-
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  PrimaryColumn
+} from "typeorm";
 import { Account } from "./Account";
 import { Event } from "./Event";
 

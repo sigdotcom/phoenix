@@ -1,34 +1,44 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from "typeorm";
 
 import { Application } from "./Application";
 import { Event } from "./Event";
 import { Group } from "./Group";
 import { Permission } from "./Permission";
 import { Sig } from "./Sigs";
+import { Transaction } from "./Transaction";
 
 @Entity()
 export class Account extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   public id: string;
 
   @Column({
-      length: 50
+    length: 50
   })
   public firstName: string;
 
   @Column({
-      length: 50
+    length: 50
   })
   public lastName: string;
 
   @Column({
-      unique: true
+    unique: true
   })
   public email: string;
 
   @Column({
-    default: false,
-    select: false
+    default: false
+    // select: false
   })
   public isSuperAdmin: boolean;
 
@@ -56,6 +66,10 @@ export class Account extends BaseEntity {
   @OneToMany(type => Application, application => application.account)
   @JoinTable()
   public applications: Application[];
+
+  @OneToMany(type => Transaction, transaction => transaction.account)
+  @JoinTable()
+  public transactions: Transaction[];
 
   @ManyToMany(type => Sig, sig => sig.accounts)
   @JoinTable()

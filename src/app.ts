@@ -6,11 +6,9 @@ import * as session from "koa-session";
 
 import { Action, useKoaServer } from "routing-controllers";
 import { createConnection } from "typeorm";
-import { AccountController } from "./controllers/Account";
-import { ApplicationController } from "./controllers/Application";
-import { EventController } from "./controllers/Event";
-import { GroupController } from "./controllers/Group";
-import { PermissionController } from "./controllers/Permission";
+
+import * as controllers from "./controllers";
+
 import { passport } from "./middleware/auth";
 
 import { config } from "./config";
@@ -18,7 +16,7 @@ import { router } from "./routes";
 
 export const app = new Koa();
 
-app.keys = ['put secret key here'];
+app.keys = ["put secret key here"];
 
 app.use(koaBody());
 app.use(cors());
@@ -31,7 +29,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 useKoaServer(app, {
-  controllers: [AccountController, ApplicationController, EventController, GroupController, PermissionController],
+  controllers: Object.keys(controllers).map(key => controllers[key]),
   currentUserChecker: async (action: Action) => {
     const user = action.context.state.user;
     const auth_header = action.context.headers.authorization;
@@ -39,19 +37,26 @@ useKoaServer(app, {
       return user;
     }
 
-    await passport.authenticate('bearer', { session: false })(action.context, async () => {});
+    await passport.authenticate("bearer", { session: false })(
+      action.context,
+      async () => {}
+    );
     return action.context.state.user;
   },
-  routePrefix: "/api/v1",
+  routePrefix: "/api/v1"
 });
 
 /* istanbul ignore next */
 if (!module.parent) {
-  createConnection().then(async connection => {
-    app.listen(config.port, config.host, () => {
-      console.log(
-        `Server is listening on ${config.host}:${config.port} (${config.NODE_ENV})`
-      );
-    });
-  }).catch(error => console.log("TypeORM connection error: ", error));
+  createConnection()
+    .then(async connection => {
+      app.listen(config.port, config.host, () => {
+        console.log(
+          `Server is listening on ${config.host}:${config.port} (${
+            config.NODE_ENV
+          })`
+        );
+      });
+    })
+    .catch(error => console.log("TypeORM connection error: ", error));
 }
