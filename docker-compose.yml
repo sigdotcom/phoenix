@@ -8,6 +8,8 @@ services:
     environment: 
       - POSTGRES_USER=phoenix
       - POSTGRES_PASSWORD=phoenix
+    ports:
+      - "5431:5432"
   web: 
     build: .
     volumes:

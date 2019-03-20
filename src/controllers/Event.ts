@@ -24,8 +24,9 @@ export class EventController {
   }
 
   @Get("/events/:id/")
-  public async get(@CurrentUser({ required: false }) user: Account, @Param("id") id: string) {
-    if (Auth.isAuthorized(user, ["access specific events"]) || id === user.id) {
+  public async get(@CurrentUser({ required: false }) user: Account, @Param("id") id: number) {
+    const target = await Event.findOne({ id }, {relations: ["creator"]});
+    if (Auth.isAuthorized(user, ["access specific events"]) || target.creator.id === user.id) {
       return Event.findOne({ id }, {relations: ["groups", "permissions", "applications"]});
     }
     else {
@@ -34,8 +35,9 @@ export class EventController {
   }
 
   @Patch("/events/:id/")
-  public async patch(@CurrentUser({ required: false }) user: Account, @Param("id") id: string, @Body() event: object) {
-    if (Auth.isAuthorized(user, ["modify specific events"]) || id === user.id) {
+  public async patch(@CurrentUser({ required: false }) user: Account, @Param("id") id: number, @Body() event: object) {
+    const target = await Event.findOne({ id }, {relations: ["creator"]});
+    if (Auth.isAuthorized(user, ["modify specific events"]) || target.creator.id === user.id) {
       await Event.update(id, event);
       return Event.findOne({ id });
     }
@@ -46,8 +48,9 @@ export class EventController {
 
   @Delete("/events/:id/")
   @OnUndefined(204)
-  public async remove(@CurrentUser({ required: true }) user: Account, @Param("id") id: string) {
-    if (Auth.isAuthorized(user, ["delete specific events"]) || id === user.id) {
+  public async remove(@CurrentUser({ required: true }) user: Account, @Param("id") id: number) {
+    const target = await Event.findOne({ id }, {relations: ["creator"]});
+    if (Auth.isAuthorized(user, ["delete specific events"]) || target.creator.id === user.id) {
       return Event.delete({ id });
     }
     else {

@@ -5,8 +5,8 @@ import { Sig } from "./Sigs";
 
 @Entity()
 export class Event extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
-  public id: string;
+  @PrimaryGeneratedColumn()
+  public id: number;
 
   @CreateDateColumn()
   public dateCreated: Date;
