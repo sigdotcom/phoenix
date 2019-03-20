@@ -12,24 +12,15 @@ def make_request(type, url, json=None):
     request = getattr(requests, type)
     if json:
         return request(
-            url,
-            json,
-            headers={"Authorization": "Bearer " + BEARER_TOKEN}
-        )
+            url, json, headers={"Authorization": "Bearer " + BEARER_TOKEN})
     else:
         return request(
-            url,
-            headers={"Authorization": "Bearer " + BEARER_TOKEN}
-        )
+            url, headers={"Authorization": "Bearer " + BEARER_TOKEN})
+
 
 def create_application(name):
-    return make_request(
-        "post",
-        APPLICATION_URL,
-        json={
-            "name": name
-        }
-    )
+    return make_request("post", APPLICATION_URL, json={"name": name})
+
 
 def create_product(name, description, price):
     return make_request(
@@ -39,8 +30,7 @@ def create_product(name, description, price):
             "name": name,
             "description": description,
             "price": price
-        }
-    )
+        })
 
 
 def create_transaction():
@@ -48,9 +38,8 @@ def create_transaction():
     product_id = response.json().get("id")
     transaction_url = PRODUCT_URL + product_id + "/transactions/"
 
-    return make_request(
-        "post", transaction_url, json={"token": "tok_visa"}
-    )
+    return make_request("post", transaction_url, json={"token": "tok_visa"})
+
 
 # Creating an application
 # response = create_application("test")
@@ -63,7 +52,6 @@ def create_transaction():
 #   20.20
 # )
 # print(response.json())
-
 
 # Creating a transaction
 response = create_transaction()
