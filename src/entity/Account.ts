@@ -36,8 +36,8 @@ export class Account extends BaseEntity {
   public email: string;
 
   @Column({
-    default: false,
-    select: false
+    default: false
+    // select: false
   })
   public isSuperAdmin: boolean;
 
