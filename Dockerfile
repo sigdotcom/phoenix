@@ -2,7 +2,7 @@ FROM node:latest
 
 WORKDIR /server
 
-COPY . /server 
+COPY . /server
 ADD package.json /server/package.json
 RUN yarn --ignore-engines install
 

@@ -9,14 +9,14 @@ import { createConnection } from "typeorm";
 
 import * as controllers from "./controllers";
 
-import { passport } from "./middleware/auth";
+import { HeaderAuthMiddleware, passport } from "./middleware/auth";
 
 import { config } from "./config";
 import { router } from "./routes";
 
 export const app = new Koa();
 
-app.keys = ["put secret key here"];
+app.keys = [config.SECRET_APP_KEY];
 
 app.use(koaBody());
 app.use(cors());
@@ -31,18 +31,13 @@ app.use(router.allowedMethods());
 useKoaServer(app, {
   controllers: Object.keys(controllers).map(key => controllers[key]),
   currentUserChecker: async (action: Action) => {
-    const user = action.context.state.user;
-    const auth_header = action.context.headers.authorization;
-    if (user) {
-      return user;
+    if (config.NODE_ENV === "development") {
+      console.log("Skipping authentication (development mode)...");
+      return true;
     }
-
-    await passport.authenticate("bearer", { session: false })(
-      action.context,
-      async () => {}
-    );
-    return action.context.state.user;
+    return action.context.user;
   },
+  middlewares: [HeaderAuthMiddleware],
   routePrefix: "/api/v1"
 });
 
