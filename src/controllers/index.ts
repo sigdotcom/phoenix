@@ -5,3 +5,5 @@ export { PermissionController } from "./Permission";
 export { CategoryController } from "./ProductCategory";
 export { ProductController } from "./Product";
 export { TransactionController } from "./Transaction";
+export { EventController } from "./Event";
+export { MailController } from "./Mail";

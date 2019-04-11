@@ -27,6 +27,7 @@
    "license": "MPL-2.0",
    "dependencies": {
       "@koa/cors": "^2.2.1",
+      "@sendgrid/mail": "^6.3.1",
       "@types/koa-bodyparser": "^4.2.0",
       "@types/koa-passport": "^4.0.1",
       "@types/koa-session": "^5.7.3",
