@@ -2,6 +2,7 @@ import { Body, CurrentUser, Delete, Get, JsonController, OnUndefined, Param, Pat
 import { EntityFromBody } from "typeorm-routing-controllers-extensions";
 
 import * as sgMail from "@sendgrid/mail"
+import { config } from "../config"
 import { Account } from "../Entity/Account"
 import * as Auth from "../lib/auth";
 
@@ -10,7 +11,7 @@ export class MailController {
   @Post("/mail/")
   public async save(@CurrentUser({ required: false }) user: Account, @Body() body: any) {
     if (Auth.isAuthorized(user, ["create events"])) {
-      sgMail.setApiKey("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");
+      sgMail.setApiKey(config.SENDGRID_API_KEY);
       sgMail.send(body);
       return body;
     } else {

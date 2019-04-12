@@ -3,6 +3,7 @@ export interface IConfig {
   GOOGLE_CLIENT_ID: string;
   GOOGLE_CLIENT_SECRET: string;
   GOOGLE_PROVIDER_NAME: string;
+  SENDGRID_API_KEY: string;
   STRIPE_PRIVATE_TOKEN: string;
   STRIPE_PUBLIC_TOKEN: string;
   NODE_ENV: string;
@@ -16,6 +17,7 @@ export const config: IConfig = {
     process.env.GOOGLE_CLIENT_SECRET || "TEST_CLIENT_SECRET",
   GOOGLE_PROVIDER_NAME: "google",
   NODE_ENV: process.env.NODE_ENV || "development",
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
   STRIPE_PRIVATE_TOKEN: process.env.STRIPE_PRIVATE_TOKEN || "TEST",
   STRIPE_PUBLIC_TOKEN: process.env.STRIPE_PUBLIC_TOKEN || "TEST",
   ext: process.env.NODE_ENV !== "production" ? ".ts" : ".js",
