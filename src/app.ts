@@ -2,7 +2,6 @@ import * as cors from "@koa/cors";
 import * as Koa from "koa";
 import * as koaBody from "koa-bodyparser";
 import * as logger from "koa-logger";
-import * as session from "koa-session";
 
 import { Action, useKoaServer } from "routing-controllers";
 import { createConnection } from "typeorm";
@@ -21,9 +20,7 @@ app.keys = [config.SECRET_APP_KEY];
 app.use(koaBody());
 app.use(cors());
 app.use(logger());
-app.use(session(app));
 app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
